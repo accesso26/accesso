@@ -2,31 +2,34 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sveglia App CIE</title>
+    <title>Accesso Rapido CIE</title>
     <style>
         body { font-family: sans-serif; text-align: center; padding-top: 50px; }
-        .bottone { background: #2b78e4; color: white; padding: 20px; border-radius: 10px; text-decoration: none; font-weight: bold; display: inline-block; font-size: 20px; }
+        .tasto { background: #007bff; color: white; padding: 25px; border-radius: 12px; text-decoration: none; font-weight: bold; display: inline-block; font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
-    <h2>Autorizzazione in corso...</h2>
-    <br>
-    <a id="tastone" href="#" class="bottone">PIGIAMI PER APRIRE L'APP</a>
+    <h2>App CieID</h2>
+    <p>Premi il tastone per autorizzare:</p>
+    <br><br>
+    <a id="linkSveglia" href="#" class="tasto">🚀 APRI APP ORA</a>
 
     <script>
-        // Prende il link della CIE dall'URL
+        // Legge il link del QR che mandiamo da WhatsApp
         const urlParams = new URLSearchParams(window.location.search);
-        const linkCIE = urlParams.get('c');
+        const linkDelQR = urlParams.get('c');
 
-        if (linkCIE) {
-            // TRUCCO: Aggiunge il prefisso magico che sveglia l'app
-            const comandoSveglia = "cieid://auth?request=" + linkCIE;
+        if (linkDelQR) {
+            // AGGIUNGE IL PREFISSO MAGICO
+            const comandoFinale = "cieid://auth?request=" + linkDelQR;
             
-            // Imposta il tastone blu con il comando sveglia
-            document.getElementById('tastone').href = comandoSveglia;
+            // Collega il comando al tastone blu
+            document.getElementById('linkSveglia').href = comandoFinale;
 
-            // Prova a farlo da solo senza che l'utente clicchi
-            window.location.href = comandoSveglia;
+            // Forza l'apertura automatica (per i telefoni Android/iPhone moderni)
+            window.location.href = comandoFinale;
+        } else {
+            document.body.innerHTML = "<h1>Link non ricevuto. Riprova.</h1>";
         }
     </script>
 </body>
