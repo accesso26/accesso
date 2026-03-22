@@ -3,30 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accesso Assistito</title>
+    <title>Apertura App CieID</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 40px; background: #f4f7f6; color: #333; }
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 2s linear infinite; margin: 20px auto; }
+        body { font-family: sans-serif; text-align: center; padding: 50px; background: #f4f7f6; }
+        .loader { border: 8px solid #f3f3f3; border-top: 8px solid #3498db; border-radius: 50%; width: 50px; height: 50px; animation: spin 2s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .btn { display: inline-block; padding: 15px 30px; background-color: #007bff; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 20px; }
+        .btn { background: #007bff; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <h2>Apertura App CieID...</h2>
+
+    <h2>Reindirizzamento all'App CieID...</h2>
     <div class="loader"></div>
-    <p>Se l'app non si apre entro 3 secondi, clicca il tasto blu:</p>
-    <a id="pazzo" href="#" class="btn">APRI APP CIE ID</a>
+    <p>Se l'app non si apre automaticamente, clicca il tasto qui sotto:</p>
+    
+    <a id="linkApp" href="#" class="btn">APRI APP CIE ID</a>
 
     <script>
+        // 1. Prende tutto quello che c'è dopo "?c=" nell'URL
         const params = new URLSearchParams(window.location.search);
-        const qrUrl = params.get('qr');
+        const qrUrl = params.get('c');
+
         if (qrUrl) {
-            const linkMagico = "cieid://auth?request=" + decodeURIComponent(qrUrl);
-            document.getElementById('pazzo').href = linkMagico;
-            // Prova l'apertura automatica
-            window.location.href = linkMagico;
+            // 2. Crea il "Link Magico" con il prefisso cieid://
+            const magicLink = "cieid://auth?request=" + qrUrl;
+
+            // 3. Imposta il tasto blu con il link corretto
+            document.getElementById('linkApp').href = magicLink;
+
+            // 4. Prova ad aprire l'app AUTOMATICAMENTE dopo 1 secondo
+            setTimeout(() => {
+                window.location.href = magicLink;
+            }, 1000);
         } else {
-            document.body.innerHTML = "<h2>Errore: Link non valido. Richiedi un nuovo accesso.</h2>";
+            document.body.innerHTML = "<h1>Errore: Link non valido. Richiedi un nuovo accesso.</h1>";
         }
     </script>
 </body>
