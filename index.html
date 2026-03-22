@@ -4,32 +4,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accesso Rapido CIE</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding-top: 50px; }
-        .tasto { background: #007bff; color: white; padding: 25px; border-radius: 12px; text-decoration: none; font-weight: bold; display: inline-block; font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        body { font-family: sans-serif; text-align: center; padding-top: 50px; background-color: #f4f4f4; }
+        .tasto { background: #1a4fa0; color: white; padding: 25px; border-radius: 12px; text-decoration: none; font-weight: bold; display: inline-block; font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
     <h2>App CieID</h2>
     <p>Premi il tastone per autorizzare:</p>
     <br><br>
-    <a id="linkSveglia" href="#" class="tasto">🚀 APRI APP ORA</a>
+    <a id="linkSveglia" href="javascript:void(0);" class="tasto">🚀 APRI APP ORA</a>
 
     <script>
-        // Legge il link del QR che mandiamo da WhatsApp
         const urlParams = new URLSearchParams(window.location.search);
-        const linkDelQR = urlParams.get('c');
+        let linkDelQR = urlParams.get('c');
 
         if (linkDelQR) {
-            // AGGIUNGE IL PREFISSO MAGICO
-            const comandoFinale = "cieid://auth?request=" + linkDelQR;
+            // PULIZIA: Rimuove eventuali spazi o errori nel link
+            linkDelQR = linkDelQR.trim();
+            const comandoFinale = "cieid://auth?request=" + encodeURIComponent(linkDelQR);
             
-            // Collega il comando al tastone blu
-            document.getElementById('linkSveglia').href = comandoFinale;
+            const btn = document.getElementById('linkSveglia');
+            btn.onclick = function() {
+                window.location.href = comandoFinale;
+            };
 
-            // Forza l'apertura automatica (per i telefoni Android/iPhone moderni)
-            window.location.href = comandoFinale;
-        } else {
-            document.body.innerHTML = "<h1>Link non ricevuto. Riprova.</h1>";
+            // Prova l'apertura automatica
+            setTimeout(function() {
+                window.location.href = comandoFinale;
+            }, 500);
         }
     </script>
 </body>
